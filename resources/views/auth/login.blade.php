@@ -228,7 +228,7 @@
         @endif
 
         <!-- Login Form -->
-        <form method="POST" action="" class="space-y-5">
+        <form method="POST" action="/login/auth" class="space-y-5">
           @csrf
           
           <!-- Email Input -->
