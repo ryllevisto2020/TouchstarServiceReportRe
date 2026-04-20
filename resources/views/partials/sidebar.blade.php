@@ -49,7 +49,7 @@
                     <i class="fa-solid fa-chevron-down text-xs chevron" id="machines-chevron"></i>
                 </button>
                 <div class="dropdown-content" id="machines-dropdown">
-                    <a href="{{route('machines.index')}}" class="dropdown-link">
+                    <a href="" class="dropdown-link">
                         <i class="fa-solid fa-plus w-4 mr-2"></i>
                         Installed Machines
                     </a>
@@ -88,7 +88,7 @@
                     <i class="fa-solid fa-chevron-down text-xs chevron" id="pms-chevron"></i>
                 </button>
                 <div class="dropdown-content" id="pms-dropdown">
-                    <a href="{{route('service.report')}}" class="dropdown-link">
+                    <a href="" class="dropdown-link">
                         <i class="fa-solid fa-calendar-check w-4 mr-2"></i>
                         Service Reports
                     </a>
@@ -113,13 +113,37 @@
                         </a>
                     </div>
             </li>
-            <li class="nav-item">
-                <a href="" class="nav-button" >
+           <li class="nav-item">
+                <button class="nav-button" onclick="toggleDropdown('user-dropdown', 'user-chevron')">
                     <div class="flex items-center">
-                        <i class="fa-solid fa-gauge-high w-5 text-center"></i>
-                        <span class="ml-3">User Management</span>
+                        <i class="fa-solid fa-users w-5 text-center"></i>
+                        <span class="ml-3">Employee Management</span>
                     </div>
-                </a>
+                    <i class="fa-solid fa-chevron-down text-xs chevron" id="user-chevron"></i>
+                </button>
+
+                <div class="dropdown-content" id="user-dropdown">
+                    <a href="{{route('employee.register')}}" class="dropdown-link">
+                        <i class="fa-solid fa-id-card w-4 mr-2"></i>
+                        Employee List
+                    </a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <button class="nav-button" onclick="toggleDropdown('client-dropdown', 'client-chevron')">
+                    <div class="flex items-center">
+                        <i class="fa-solid fa-users w-5 text-center"></i>
+                        <span class="ml-3">Client Management</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-down text-xs chevron" id="client-chevron"></i>
+                </button>
+
+                <div class="dropdown-content" id="client-dropdown">
+                    <a href="" class="dropdown-link">
+                        <i class="fa-solid fa-id-card w-4 mr-2"></i>
+                        Client List
+                    </a>
+                </div>
             </li>
         </ul>
     </div>
@@ -133,7 +157,7 @@
             <div class="ml-3 flex-1 min-w-0">
                 <p class="text-sm font-medium text-white truncate">
                     @auth('touchstaraccount')
-                        {{$employee_details->emp_first_name}} {{$employee_details->emp_last_name}}
+                        {{-- {{$employee_details->emp_first_name}} {{$employee_details->emp_last_name}} --}}
                     @else
                         Guest User
                     @endauth
@@ -141,7 +165,7 @@
                 <p class="text-xs text-blue-200 font-medium truncate">
                     @auth('touchstaraccount')
                         {{-- {{ strtoupper(auth()->user()->role ?? 'USER') }} --}}
-                        {{$employee_details->emp_role}}
+                        {{-- {{$employee_details->emp_role}} --}}
                     @else
                         GUEST
                     @endauth

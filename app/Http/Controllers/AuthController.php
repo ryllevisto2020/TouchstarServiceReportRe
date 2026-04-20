@@ -21,5 +21,13 @@ class AuthController extends Controller
             return Response::json(['message' => 'Invalid credentials'], 401);
         }
     }
+
+    public function register(){
+        return view('auth.register');
+    }
+
+    public function client(){
+        return view('clientauth.register');
+    }
 }
 
