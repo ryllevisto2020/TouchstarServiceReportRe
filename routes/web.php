@@ -22,6 +22,11 @@ use Illuminate\Support\Facades\Response;
             return Response('Unauthorized', 401);
         }
     })->name('logout');
+    
+
+    Route::get('/employee/register', [AuthController::class, 'register'])->name('employee.register');
+
+    Route::get('/client/register', [AuthController::class, 'client'])->name('client.register');
 
 
     Route::get('/machine', [MachineController::class, 'index'])->name('machines.index')->middleware();
