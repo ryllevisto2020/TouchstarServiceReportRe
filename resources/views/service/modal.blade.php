@@ -278,15 +278,16 @@
                             </label>
                             <div class="w-full px-4 py-3 rounded-lg border border-gray-300 bg-gray-50">
                                 <div class="text-gray-700 font-medium" id="service-engineer-name">
-                                    {{ Auth::user()->name ?? 'Current User' }}
+                                    {{-- {{ Auth::user()->name ?? 'Current User' }} --}}
+                                    {{$employee_details->emp_first_name}} {{$employee_details->emp_last_name}}
                                 </div>
                                 <div class="text-xs text-gray-500 mt-1">
-                                    <i class="fas fa-building mr-1"></i> {{ Auth::user()->department ?? 'Service Department' }}
+                                    <i class="fas fa-building mr-1"></i> {{$employee_details->emp_position}}
                                 </div>
                             </div>
                             <!-- Hidden fields for form submission -->
-                            <input type="hidden" name="service_engineer" value="{{ Auth::user()->name ?? '' }}">
-                            <input type="hidden" name="service_engineer_department" value="{{ Auth::user()->department ?? '' }}">
+                            <input type="hidden" name="service_engineer" value="{{$employee_details->emp_first_name}} {{$employee_details->emp_last_name}}">
+                            <input type="hidden" name="service_engineer_department" value="{{$employee_details->emp_deparment}}">
                         </div>
                     </div>
                 </div>

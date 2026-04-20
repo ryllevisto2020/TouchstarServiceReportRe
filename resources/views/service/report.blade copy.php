@@ -79,7 +79,47 @@
   </div>
 
   <!-- Card Grid -->
-  <div id="card-view" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"></div>
+  <div id="" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+    @foreach($machines as $machine)
+        <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm card-hover flex flex-col">
+      <div class="relative h-44 overflow-hidden bg-gray-100 flex-shrink-0">
+        <img class="card-img w-full h-full object-cover" src="{{ $machine->image_path ? Storage::url($machine->image_path) : asset('machines/default-machine.jpg') }}" alt="{{ $machine->image_path ? Storage::url($machine->image_path) : asset('machines/default-machine.jpg') }}" onerror="this.src='https://placehold.co/400x176?text=No+Image'">
+        @if($machine->status === 'Operational')
+                <span class="absolute top-2.5 right-2.5 px-2.5 py-1 rounded-full text-[11px] font-bold backdrop-blur-md bg-green-100 text-green-700 border">
+                  {{$machine->status}}
+                </span>
+        @elseif($machine->status === 'Maintenance')
+                <span class="absolute top-2.5 right-2.5 px-2.5 py-1 rounded-full text-[11px] font-bold backdrop-blur-md bg-yellow-100 text-yellow-700">
+                  {{$machine->status}}
+                </span>
+        @elseif($machine->status === 'Standby')
+                <span class="absolute top-2.5 right-2.5 px-2.5 py-1 rounded-full text-[11px] font-bold backdrop-blur-md bg-blue-100 text-blue-700">
+                  {{$machine->status}}
+                </span>
+        @elseif($machine->status === 'Not Operational')
+                <span class="absolute top-2.5 right-2.5 px-2.5 py-1 rounded-full text-[11px] font-bold backdrop-blur-md bg-red-100 text-red-700">
+                  {{$machine->status}}
+                </span>
+        @endif
+      </div>
+      <div class="p-4 flex-1">
+        <div class="text-[15px] font-bold text-gray-900 leading-snug">{{$machine->name}}</div>
+        <div class="font-mono-custom text-[11px] text-gray-400 mt-0.5"># {{$machine->serial_number}}</div>
+        <div class="grid grid-cols-2 gap-2.5 mt-4">
+          <div><div class="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Location</div><div class="text-[13px] font-medium text-gray-700 mt-0.5 leading-tight">{{$machine->client_location}}</div></div>
+          <div><div class="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Region</div><div class="text-[13px] font-medium text-gray-700 mt-0.5">{{$machine->region}}</div></div>
+          <div><div class="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Last Service</div><div class="text-[13px] font-medium text-gray-700 mt-0.5">{{ date("M jS Y", strtotime($machine->last_service_date)) }}</div></div>
+          <div><div class="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Next PMS</div><div class="text-[13px] mt-0.5 ${dateCls(m.nextService)}">{{ date("M jS Y", strtotime($machine->next_service_date)) }}</div></div>
+        </div>
+      </div>
+      <div class="px-4 py-3 border-t border-gray-100 bg-gray-50/70 flex justify-end">
+        <button onclick="openModal({{$machine->id}})" class="inline-flex items-center gap-2 px-4 h-9 bg-green-600 hover:bg-green-700 active:bg-green-800 text-white text-[13px] font-semibold rounded-xl shadow-sm transition-all">
+          <i class="fas fa-wrench text-xs"></i> Complete Service
+        </button>
+      </div>
+    </div>
+    @endforeach
+  </div>
 
   <!-- Table View -->
   <div id="table-view" class="hidden bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
@@ -115,15 +155,28 @@
 </div>
 @include('service.modal')
 <script>
-const MACHINES = {{ Illuminate\Support\Js::from($machines) }};
-console.log(MACHINES);
+  console.log({{ Illuminate\Support\Js::from($machines) }});  
+const MACHINES = [
+  { id:1,  name:'AutoAnalyzer Pro X3',    model:'AAP-X3',   serial:'TSM-2024-001', status:'Operational',     location:'Manila General Hospital',    region:'NCR',        lastService:'2025-10-12', nextService:'2026-04-12', image:'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&q=80' },
+  { id:2,  name:'Hematology Analyzer Z5', model:'HAZ-5',    serial:'TSM-2024-002', status:'Maintenance',     location:'Cebu Medical Center',        region:'Region VII', lastService:'2025-09-01', nextService:'2026-03-01', image:'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&q=80' },
+  { id:3,  name:'Blood Gas Monitor BG7',  model:'BGM-7',    serial:'TSM-2024-003', status:'Standby',         location:'Davao Doctors Hospital',     region:'Region XI',  lastService:'2025-11-20', nextService:'2026-05-20', image:'https://images.unsplash.com/photo-1530497610245-94d3c16cda28?w=400&q=80' },
+  { id:4,  name:'Immunoassay System IS2', model:'ISS-2',    serial:'TSM-2024-004', status:'Not Operational', location:"St. Luke's Medical Center",   region:'NCR',        lastService:'2025-07-15', nextService:'2026-01-15', image:'https://images.unsplash.com/photo-1581595219315-a187dd40c322?w=400&q=80' },
+  { id:5,  name:'Centrifuge MaxSpin 3000',model:'CMS-3000', serial:'TSM-2024-005', status:'Operational',     location:'Philippine General Hospital', region:'NCR',        lastService:'2025-12-01', nextService:'2026-06-01', image:'https://images.unsplash.com/photo-1576671081837-49000212a370?w=400&q=80' },
+  { id:6,  name:'Ultrasound Compact UC4', model:'UCU-4',    serial:'TSM-2024-006', status:'Operational',     location:'Iloilo Mission Hospital',    region:'Region VI',  lastService:'2025-10-28', nextService:'2026-04-28', image:'https://images.unsplash.com/photo-1504439468489-c8920d796a29?w=400&q=80' },
+  { id:7,  name:'Coagulation Analyzer CA1',model:'CAA-1',   serial:'TSM-2024-007', status:'Maintenance',     location:'Baguio General Hospital',    region:'CAR',        lastService:'2025-08-10', nextService:'2026-02-10', image:'https://images.unsplash.com/photo-1559757175-0eb30cd8c063?w=400&q=80' },
+  { id:8,  name:'Electrolyte Analyzer EA6',model:'EAA-6',   serial:'TSM-2024-008', status:'Operational',     location:'Makati Medical Center',      region:'NCR',        lastService:'2025-11-05', nextService:'2026-05-05', image:'https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=400&q=80' },
+  { id:9,  name:'Urinalysis System UA3',  model:'UAS-3',    serial:'TSM-2024-009', status:'Standby',         location:'Naga City Hospital',         region:'Region V',   lastService:'2025-09-22', nextService:'2026-03-22', image:'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=400&q=80' },
+  { id:10, name:'Chemistry Analyzer CA9', model:'CHA-9',    serial:'TSM-2024-010', status:'Operational',     location:'Zamboanga Medical Center',   region:'Region IX',  lastService:'2025-12-15', nextService:'2026-06-15', image:'https://images.unsplash.com/photo-1565217271-2f9bef8c4c6f?w=400&q=80' },
+  { id:11, name:'PCR Thermocycler TC2',   model:'PCT-2',    serial:'TSM-2024-011', status:'Maintenance',     location:'Philippine Heart Center',    region:'NCR',        lastService:'2025-08-25', nextService:'2026-02-25', image:'https://images.unsplash.com/photo-1530026405186-ed1f139313f8?w=400&q=80' },
+  { id:12, name:'Flow Cytometer FC8',     model:'FCT-8',    serial:'TSM-2024-012', status:'Operational',     location:'National Kidney Institute',  region:'NCR',        lastService:'2025-11-30', nextService:'2026-05-30', image:'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&q=80' },
+];
 
 let currentView='card', filtered=[...MACHINES], currentPage=1;
 const PER_PAGE=8;
 
 // Populate locations
 const lf=document.getElementById('filter-location');
-[...new Set(MACHINES.map(m=>m.client_location))].sort().forEach(l=>{const o=document.createElement('option');o.value=l;o.textContent=l;lf.appendChild(o);});
+[...new Set(MACHINES.map(m=>m.location))].sort().forEach(l=>{const o=document.createElement('option');o.value=l;o.textContent=l;lf.appendChild(o);});
 
 const SBADGE={
   'Operational':     'bg-green-100 text-green-700 border border-green-200',
@@ -180,17 +233,17 @@ function renderCards(data){
   document.getElementById('card-view').innerHTML=data.map(m=>`
     <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm card-hover flex flex-col">
       <div class="relative h-44 overflow-hidden bg-gray-100 flex-shrink-0">
-        <img class="card-img w-full h-full object-cover" src="storage/${m.image_path}" alt="storage/${m.image_path}" onerror="this.src='https://placehold.co/400x176?text=No+Image'">
+        <img class="card-img w-full h-full object-cover" src="${m.image}" alt="${m.name}" onerror="this.src='https://placehold.co/400x176?text=No+Image'">
         <span class="absolute top-2.5 right-2.5 px-2.5 py-1 rounded-full text-[11px] font-bold backdrop-blur-md ${SBADGE[m.status]||'bg-gray-100 text-gray-600'}">${m.status}</span>
       </div>
       <div class="p-4 flex-1">
         <div class="text-[15px] font-bold text-gray-900 leading-snug">${m.name}</div>
-        <div class="font-mono-custom text-[11px] text-gray-400 mt-0.5"># ${m.serial_number}</div>
+        <div class="font-mono-custom text-[11px] text-gray-400 mt-0.5"># ${m.serial}</div>
         <div class="grid grid-cols-2 gap-2.5 mt-4">
-          <div><div class="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Location</div><div class="text-[13px] font-medium text-gray-700 mt-0.5 leading-tight">${m.client_location}</div></div>
-          <div><div class="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Region</div><div class="text-[13px] font-medium text-gray-700 mt-0.5">${m.city}</div></div>
-          <div><div class="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Last Service</div><div class="text-[13px] font-medium text-gray-700 mt-0.5">${fmt(m.last_service_date)}</div></div>
-          <div><div class="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Next PMS</div><div class="text-[13px] mt-0.5 ${dateCls(m.next_service_datee)}">${fmt(m.next_service_date)}</div></div>
+          <div><div class="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Location</div><div class="text-[13px] font-medium text-gray-700 mt-0.5 leading-tight">${m.location}</div></div>
+          <div><div class="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Region</div><div class="text-[13px] font-medium text-gray-700 mt-0.5">${m.region}</div></div>
+          <div><div class="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Last Service</div><div class="text-[13px] font-medium text-gray-700 mt-0.5">${fmt(m.lastService)}</div></div>
+          <div><div class="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Next PMS</div><div class="text-[13px] mt-0.5 ${dateCls(m.nextService)}">${fmt(m.nextService)}</div></div>
         </div>
       </div>
       <div class="px-4 py-3 border-t border-gray-100 bg-gray-50/70 flex justify-end">
