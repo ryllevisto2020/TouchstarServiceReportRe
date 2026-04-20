@@ -132,21 +132,23 @@
             </div>
             <div class="ml-3 flex-1 min-w-0">
                 <p class="text-sm font-medium text-white truncate">
-                    @auth
-                        {{ auth()->user()->first_name }} {{ auth()->user()->last_name }}
+                    @auth('touchstaraccount')
+                        {{$employee_details->emp_first_name}} {{$employee_details->emp_last_name}}
                     @else
                         Guest User
+                        
                     @endauth
                 </p>
                 <p class="text-xs text-blue-200 font-medium truncate">
-                    @auth
-                        {{ strtoupper(auth()->user()->role ?? 'USER') }}
+                    @auth('touchstaraccount')
+                        {{-- {{ strtoupper(auth()->user()->role ?? 'USER') }} --}}
+                        {{$employee_details->emp_role}}
                     @else
                         GUEST
                     @endauth
                 </p>
             </div>
-            @auth
+            @auth('touchstaraccount')
                 <form method="POST" action="{{ route('logout') }}" class="ml-2">
                     @csrf
                     <button type="submit" 
