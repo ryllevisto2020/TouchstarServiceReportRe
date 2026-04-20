@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Machine;
+use App\Models\touchStarEmp;
+use App\Models\touchstarUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class MachineController extends Controller
 {
@@ -66,8 +69,10 @@ class MachineController extends Controller
             ->filter()
             ->sort()
             ->values();
+        
+        $employee_details = touchStarEmp::where('emp_id', Auth::guard('touchstaraccount')->user()->emp_id)->first();
 
-        return view('machines.machine', compact('machines', 'locations', 'serialNumbers'));
+        return view('machines.machine', compact('machines', 'locations', 'serialNumbers','employee_details'));
     }
 
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\touchstarUser;
 use App\Models\User;
 
 return [
@@ -42,6 +43,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'touchstaraccount' => [
+            'driver' => 'session',
+            'provider' => 'touchstaraccounts',
+        ],
     ],
 
     /*
@@ -65,6 +70,10 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', User::class),
+        ],
+        'touchstaraccounts' => [
+            'driver' => 'eloquent',
+            'model' => touchstarUser::class,
         ],
 
         // 'users' => [
