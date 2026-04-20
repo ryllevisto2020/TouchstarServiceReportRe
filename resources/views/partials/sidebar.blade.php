@@ -49,7 +49,7 @@
                     <i class="fa-solid fa-chevron-down text-xs chevron" id="machines-chevron"></i>
                 </button>
                 <div class="dropdown-content" id="machines-dropdown">
-                    <a href="" class="dropdown-link">
+                    <a href="{{route('machines.index')}}" class="dropdown-link">
                         <i class="fa-solid fa-plus w-4 mr-2"></i>
                         Installed Machines
                     </a>
@@ -88,7 +88,7 @@
                     <i class="fa-solid fa-chevron-down text-xs chevron" id="pms-chevron"></i>
                 </button>
                 <div class="dropdown-content" id="pms-dropdown">
-                    <a href="" class="dropdown-link">
+                    <a href="{{route('service.report')}}" class="dropdown-link">
                         <i class="fa-solid fa-calendar-check w-4 mr-2"></i>
                         Service Reports
                     </a>
@@ -136,7 +136,6 @@
                         {{$employee_details->emp_first_name}} {{$employee_details->emp_last_name}}
                     @else
                         Guest User
-                        
                     @endauth
                 </p>
                 <p class="text-xs text-blue-200 font-medium truncate">
