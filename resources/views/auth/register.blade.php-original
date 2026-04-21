@@ -55,7 +55,7 @@
             <h3 class="text-xl font-bold">Add New Employee</h3>
             <button id="closeAddModal" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-xl"></i></button>
         </div>
-        <form id="addForm" class="p-6 space-y-5" method="POST" action="{{ route('employee.add') }}" enctype="multipart/form-data">
+        <form id="addForm" class="p-6 space-y-5">
             <!-- Profile + Signature previews -->
             <div class="flex gap-4 flex-wrap">
                 <div class="flex-1">
@@ -81,9 +81,9 @@
             <div><label class="text-sm font-medium">Viber (+63)</label><input type="text" id="viber" class="w-full border rounded-lg px-3 py-2"></div>
             <div><label class="text-sm font-medium">Social Media URL</label><input type="text" id="social" class="w-full border rounded-lg px-3 py-2"></div>
             <div class="grid grid-cols-2 gap-4">
-                <div><label class="text-sm font-medium">Position</label><input type="text" id="position" class="w-full border rounded-lg px-3 py-2" required></div>
+                <div><label class="text-sm font-medium">Position</label><input type="text" id="position" class="w-full border rounded-lg px-3 py-2"></div>
                 <div><label class="text-sm font-medium">Department</label>
-                    <select id="dept" class="w-full border rounded-lg px-3 py-2 bg-white" required>
+                    <select id="dept" class="w-full border rounded-lg px-3 py-2 bg-white">
                         <option value="">Select</option>
                         <option>Tech Engineering</option><option>Product Specialist</option><option>IT</option>
                         <option>Marketing</option><option>Sales</option><option>HR</option>
@@ -91,7 +91,7 @@
                 </div>
             </div>
             <div><label class="text-sm font-medium">Employment Status</label>
-                <select id="empStatus" class="w-full border rounded-lg px-3 py-2" required>
+                <select id="empStatus" class="w-full border rounded-lg px-3 py-2">
                     <option value="active">Active</option><option value="on_leave">On Leave</option><option value="inactive">Inactive</option>
                 </select>
             </div>
@@ -109,17 +109,20 @@
 
     // Load from localStorage
     function loadData() {
-        // const stored = localStorage.getItem("emp_manager");
-        // if (stored) {
-        //     employees = JSON.parse(stored);
-        // } else {
-        //     employees = {{ Illuminate\Support\Js::from($employees) }};
-        //     //saveData();
-        // }
-        employees = {{ Illuminate\Support\Js::from($employees) }};
+        const stored = localStorage.getItem("emp_manager");
+        if (stored) {
+            employees = JSON.parse(stored);
+        } else {
+            employees = [
+                { id: "1", firstName: "Alice", lastName: "Chen", phone: "09123456789", viber: "9123456789", social: "", position: "UI Designer", dept: "Tech Engineering", status: "active", profilePic: null, signature: null, hasAccount: false, email: null, loginEnabled: false },
+                { id: "2", firstName: "Robert", lastName: "Katz", phone: "09234567890", viber: "", social: "", position: "Sales Lead", dept: "Sales", status: "active", profilePic: null, signature: null, hasAccount: false, email: null, loginEnabled: false },
+                { id: "3", firstName: "Maria", lastName: "Garcia", phone: "09345678901", viber: "9345678901", social: "fb.com/maria", position: "HR Manager", dept: "HR", status: "active", profilePic: null, signature: null, hasAccount: true, email: "maria@company.com", loginEnabled: true }
+            ];
+            saveData();
+        }
         refreshUI();
     }
-    //function saveData() { localStorage.setItem("emp_manager", JSON.stringify(employees)); }
+    function saveData() { localStorage.setItem("emp_manager", JSON.stringify(employees)); }
 
     function refreshUI() { updateStats(); renderTable(); }
     function updateStats() {
@@ -147,23 +150,23 @@
             return;
         }
         tbody.innerHTML = pageData.map(emp => {
-            const statusBadge = emp.emp_status === 'ACTIVE' ? 'bg-green-100 text-green-700' : (emp.emp_status === 'ON LEAVE' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700');
-            const statusText = emp.emp_status === 'ACTIVE' ? 'ACTIVE' : (emp.emp_status === 'ON LEAVE' ? 'ON LEAVE' : 'INACTIVE');
-            const avatar = emp.emp_profile != null ? `<img src="${emp.emp_profile}" class="w-9 h-9 rounded-full object-cover">` : `<div class="w-9 h-9 rounded-full bg-blue-500 text-white flex items-center justify-center text-sm font-bold">${emp.emp_first_name[0]}${emp.emp_last_name[0]}</div>`;
-            const accountSection = false//emp.hasAccount 
+            const statusBadge = emp.status === 'active' ? 'bg-green-100 text-green-700' : (emp.status === 'on_leave' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700');
+            const statusText = emp.status === 'active' ? 'Active' : (emp.status === 'on_leave' ? 'On Leave' : 'Inactive');
+            const avatar = emp.profilePic ? `<img src="${emp.profilePic}" class="w-9 h-9 rounded-full object-cover">` : `<div class="w-9 h-9 rounded-full bg-blue-500 text-white flex items-center justify-center text-sm font-bold">${(emp.firstName[0] || '')}${(emp.lastName[0] || '')}</div>`;
+            const accountSection = emp.hasAccount 
                 ? `<span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full"><i class="fas fa-check-circle mr-1"></i> Active</span>`
-                : `<button onclick="openAccountModal('${emp.emp_id}')" class="text-xs bg-purple-100 hover:bg-purple-200 text-purple-700 px-3 py-1 rounded-full transition"><i class="fas fa-user-plus mr-1"></i> Create Account</button>`;
+                : `<button onclick="openAccountModal('${emp.id}')" class="text-xs bg-purple-100 hover:bg-purple-200 text-purple-700 px-3 py-1 rounded-full transition"><i class="fas fa-user-plus mr-1"></i> Create Account</button>`;
             return `<tr class="hover:bg-gray-50">
-                <td class="px-6 py-3 whitespace-nowrap"><div class="flex items-center gap-3"><div>${avatar}</div><div><div class="font-medium">${emp.emp_first_name} ${emp.emp_last_name}</div><div class="text-xs text-gray-400">${emp.emp_phone || ''}</div></div></div></td>
-                <td class="px-6 py-3">${emp.emp_position || '—'}</td>
-                <td class="px-6 py-3">${emp.emp_deparment || '—'}</td>
+                <td class="px-6 py-3 whitespace-nowrap"><div class="flex items-center gap-3"><div>${avatar}</div><div><div class="font-medium">${emp.firstName} ${emp.lastName}</div><div class="text-xs text-gray-400">${emp.phone || ''}</div></div></div></td>
+                <td class="px-6 py-3">${emp.position || '—'}</td>
+                <td class="px-6 py-3">${emp.dept || '—'}</td>
                 <td class="px-6 py-3"><span class="px-2 py-1 rounded-full text-xs font-medium ${statusBadge}">${statusText}</span></td>
                 <td class="px-6 py-3">${accountSection}</td>
                 <td class="px-6 py-3 space-x-2">
-                    <button onclick="openEditModal('${emp.emp_id}')" class="text-blue-500 hover:text-blue-700"><i class="fas fa-edit"></i></button>
-                    <button onclick="deleteEmployee('${emp.emp_id}')" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
-                    <button onclick="viewProfile('${emp.emp_id}')" class="text-gray-500 hover:text-gray-700"><i class="fas fa-eye"></i></button>
-                   <button onclick="disableEmployee('${emp.emp_id}')" 
+                    <button onclick="openEditModal('${emp.id}')" class="text-blue-500 hover:text-blue-700"><i class="fas fa-edit"></i></button>
+                    <button onclick="deleteEmployee('${emp.id}')" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
+                    <button onclick="viewProfile('${emp.id}')" class="text-gray-500 hover:text-gray-700"><i class="fas fa-eye"></i></button>
+                   <button onclick="disableEmployee('${emp.id}')" 
                             class="text-yellow-500 hover:text-yellow-700"
                             title="Disable Account">
                         <i class="fas fa-user-slash"></i>
@@ -216,20 +219,11 @@
             loginEnabled: false
         };
         if (!newEmp.firstName || !newEmp.lastName) { Swal.fire("Error", "First & Last name required", "error"); return; }
-        //employees.unshift(newEmp);
-        //saveData();
+        employees.unshift(newEmp);
+        saveData();
         refreshUI();
         addModal.classList.add("hidden");
-        //Swal.fire("Saved", "Employee details added. You can create account later.", "success");
-        $.ajax({
-            url: "{{ route('employee.add') }}",
-            method: "POST",
-            data: newEmp,
-            headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-            success: function(response) {
-                Swal.fire("Saved", "Employee details added. You can create account later.", "success");
-            },
-        });
+        Swal.fire("Saved", "Employee details added. You can create account later.", "success");
     });
 
     // ---------- CREATE ACCOUNT (email/password) ----------
@@ -258,7 +252,7 @@
         emp.email = email;
         emp.loginEnabled = true;
         // store mock password hash (just for demo)
-        //saveData();
+        saveData();
         refreshUI();
         closeAccountModal();
         Swal.fire("Success", `Login account created for ${emp.firstName} ${emp.lastName}`, "success");
@@ -305,7 +299,7 @@
             profilePic: profileFile ? URL.createObjectURL(profileFile) : employees[idx].profilePic,
             signature: sigFile ? URL.createObjectURL(sigFile) : employees[idx].signature
         };
-        //saveData();
+        saveData();
         refreshUI();
         closeEditModal();
         Swal.fire("Updated", "Employee details updated", "success");
@@ -316,7 +310,7 @@
         Swal.fire({ title: "Confirm", text: "Delete this employee?", icon: "warning", showCancelButton: true }).then(res => {
             if (res.isConfirmed) {
                 employees = employees.filter(e => e.id !== id);
-                //saveData();
+                saveData();
                 if (getFiltered().length === 0 && currentPage > 1) currentPage--;
                 refreshUI();
                 Swal.fire("Deleted", "", "success");

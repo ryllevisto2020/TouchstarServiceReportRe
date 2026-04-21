@@ -115,6 +115,15 @@
 </div>
 @include('service.modal')
 <script>
+
+if({{ session('success') ? 'true' : 'false' }}){
+  Swal.fire({
+    position: "top-end",
+    title: "Service Report Done!",
+    showConfirmButton: false,
+    timer: 1500,
+  });
+}
 const MACHINES = {{ Illuminate\Support\Js::from($machines) }};
 console.log(MACHINES);
 
@@ -139,7 +148,7 @@ function applyFilters(){
   const st=document.getElementById('filter-status').value;
   const lo=document.getElementById('filter-location').value;
   const sr=document.getElementById('filter-serial').value.toLowerCase();
-  filtered=MACHINES.filter(m=>(!st||m.status===st)&&(!lo||m.location===lo)&&(!sr||m.serial.toLowerCase().includes(sr)||m.name.toLowerCase().includes(sr)));
+  filtered=MACHINES.filter(m=>(!st||m.status===st)&&(!lo||m.client_location===lo)&&(!sr||m.serial_number.toLowerCase().includes(sr)||m.name.toLowerCase().includes(sr)));
   currentPage=1; renderTags(st,lo,sr); render();
 }
 
@@ -190,7 +199,7 @@ function renderCards(data){
           <div><div class="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Location</div><div class="text-[13px] font-medium text-gray-700 mt-0.5 leading-tight">${m.client_location}</div></div>
           <div><div class="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Region</div><div class="text-[13px] font-medium text-gray-700 mt-0.5">${m.city}</div></div>
           <div><div class="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Last Service</div><div class="text-[13px] font-medium text-gray-700 mt-0.5">${fmt(m.last_service_date)}</div></div>
-          <div><div class="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Next PMS</div><div class="text-[13px] mt-0.5 ${dateCls(m.next_service_datee)}">${fmt(m.next_service_date)}</div></div>
+          <div><div class="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Next PMS</div><div class="text-[13px] mt-0.5 ${dateCls(m.next_service_date)}">${fmt(m.next_service_date)}</div></div>
         </div>
       </div>
       <div class="px-4 py-3 border-t border-gray-100 bg-gray-50/70 flex justify-end">
@@ -206,18 +215,18 @@ function renderTable(data){
     <tr class="hover:bg-gray-50/80 transition-colors">
       <td class="px-5 py-3.5">
         <div class="flex items-center gap-3">
-          <img class="w-10 h-10 rounded-xl object-cover border border-gray-200 flex-shrink-0" src="${m.image}" onerror="this.src='https://placehold.co/40?text=?'" alt="${m.name}">
+          <img class="w-10 h-10 rounded-xl object-cover border border-gray-200 flex-shrink-0" src="storage/${m.image_path}" onerror="this.src='https://placehold.co/40?text=?'" alt="${m.name}">
           <div>
             <div class="text-[13px] font-semibold text-gray-900">${m.name}</div>
             <div class="text-[12px] text-gray-500">${m.model}</div>
-            <div class="font-mono-custom text-[11px] text-gray-400">${m.serial}</div>
+            <div class="font-mono-custom text-[11px] text-gray-400">${m.serial_number}</div>
           </div>
         </div>
       </td>
-      <td class="px-5 py-3.5"><div class="text-[13px] font-medium text-gray-800">${m.location}</div><div class="text-[12px] text-gray-400">${m.region}</div></td>
+      <td class="px-5 py-3.5"><div class="text-[13px] font-medium text-gray-800">${m.client_location}</div><div class="text-[12px] text-gray-400">${m.city}</div></td>
       <td class="px-5 py-3.5"><span class="inline-block px-2.5 py-1 rounded-full text-[11px] font-bold ${SBADGE[m.status]||''}">${m.status}</span></td>
-      <td class="px-5 py-3.5 text-[13px] text-gray-600">${fmt(m.lastService)}</td>
-      <td class="px-5 py-3.5 text-[13px] ${dateCls(m.nextService)}">${fmt(m.nextService)}</td>
+      <td class="px-5 py-3.5 text-[13px] text-gray-600">${fmt(m.last_service_date)}</td>
+      <td class="px-5 py-3.5 text-[13px] ${dateCls(m.next_service_date)}">${fmt(m.next_service_date)}</td>
       <td class="px-5 py-3.5">
         <button onclick="openModal(${m.id})" class="inline-flex items-center gap-1.5 px-3 h-8 bg-green-600 hover:bg-green-700 text-white text-[12px] font-semibold rounded-lg transition-all">
           <i class="fas fa-wrench text-[10px]"></i> Service

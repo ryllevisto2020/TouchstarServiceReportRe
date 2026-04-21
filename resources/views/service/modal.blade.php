@@ -22,7 +22,7 @@
             </div>
             
             <!-- Form -->
-            <form id="service-form" method="POST" action="" enctype="multipart/form-data">
+            <form id="service-form" method="POST" action="/service/add" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" id="machine-id" name="machine_id" value="">
                 
