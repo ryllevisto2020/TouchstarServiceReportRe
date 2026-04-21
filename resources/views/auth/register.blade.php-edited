@@ -109,6 +109,7 @@
 
     // Load from localStorage
     function loadData() {
+        console.log({{ Illuminate\Support\Js::from($employees) }});
         // const stored = localStorage.getItem("emp_manager");
         // if (stored) {
         //     employees = JSON.parse(stored);
@@ -149,7 +150,7 @@
         tbody.innerHTML = pageData.map(emp => {
             const statusBadge = emp.emp_status === 'ACTIVE' ? 'bg-green-100 text-green-700' : (emp.emp_status === 'ON LEAVE' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700');
             const statusText = emp.emp_status === 'ACTIVE' ? 'ACTIVE' : (emp.emp_status === 'ON LEAVE' ? 'ON LEAVE' : 'INACTIVE');
-            const avatar = emp.emp_profile != null ? `<img src="${emp.emp_profile}" class="w-9 h-9 rounded-full object-cover">` : `<div class="w-9 h-9 rounded-full bg-blue-500 text-white flex items-center justify-center text-sm font-bold">${emp.emp_first_name[0]}${emp.emp_last_name[0]}</div>`;
+            const avatar = emp.emp_profile != null ? `<img src="${emp.emp_profile}" class="w-9 h-9 rounded-full object-cover">` : `<div class="w-9 h-9 rounded-full bg-blue-500 text-white flex items-center justify-center text-sm font-bold">IN</div>`;
             const accountSection = false//emp.hasAccount 
                 ? `<span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full"><i class="fas fa-check-circle mr-1"></i> Active</span>`
                 : `<button onclick="openAccountModal('${emp.emp_id}')" class="text-xs bg-purple-100 hover:bg-purple-200 text-purple-700 px-3 py-1 rounded-full transition"><i class="fas fa-user-plus mr-1"></i> Create Account</button>`;
@@ -216,7 +217,7 @@
             loginEnabled: false
         };
         if (!newEmp.firstName || !newEmp.lastName) { Swal.fire("Error", "First & Last name required", "error"); return; }
-        //employees.unshift(newEmp);
+        employees.unshift(newEmp);
         //saveData();
         refreshUI();
         addModal.classList.add("hidden");
