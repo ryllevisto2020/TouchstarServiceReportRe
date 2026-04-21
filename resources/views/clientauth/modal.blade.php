@@ -62,13 +62,6 @@
                     </select>
                 </div>
             </div>
-
-            <!-- Additional Important Information Section -->
-            <div class="border-t pt-4 mt-2">
-                <label class="text-sm font-semibold text-gray-700 flex items-center gap-2"><i class="fas fa-info-circle text-blue-500"></i> Other Important Information</label>
-                <textarea id="additionalInfo" rows="3" placeholder="Special notes, accreditation #, billing terms, key account manager, laboratory details, etc." class="w-full border rounded-lg px-4 py-2.5 mt-1 resize-y"></textarea>
-            </div>
-
             <!-- Action Buttons -->
             <div class="flex justify-end gap-3 pt-2">
                 <button type="button" id="cancelModalBtn" class="px-5 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">Cancel</button>
