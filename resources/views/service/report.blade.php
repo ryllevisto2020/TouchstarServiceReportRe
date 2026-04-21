@@ -118,11 +118,10 @@
 
 if({{ session('success') ? 'true' : 'false' }}){
   Swal.fire({
-    position: "top-end",
-    title: "Service Report Done!",
-    showConfirmButton: false,
-    timer: 1500,
-  });
+  title: "Service Completed!",
+  icon: "success",
+  draggable: true
+});
 }
 const MACHINES = {{ Illuminate\Support\Js::from($machines) }};
 console.log(MACHINES);

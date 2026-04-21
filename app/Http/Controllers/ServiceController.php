@@ -110,4 +110,8 @@ class ServiceController extends Controller
             ]);
         return redirect()->route('service.report')->with('success', 'Service report added successfully!');
     }
+
+    public function history(){
+        return view('service.history');
+    }
 }
