@@ -8,6 +8,7 @@ use App\Models\touchStarEmp;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Intervention\Image\Image;
 
 class ServiceController extends Controller
 {
@@ -17,6 +18,7 @@ class ServiceController extends Controller
         return view('service.report',compact('employee_details','machines'));
     }
     public function addReport(Request $req){
+        dd($req);
         $machine_id = $req->input('machine_id');
         $service_type = $req->input('service_type');
         $identification = $req->input('identification');
@@ -112,6 +114,7 @@ class ServiceController extends Controller
     }
 
     public function history(){
-        return view('service.history');
+        $employee_details = touchStarEmp::where('emp_id', Auth::guard('touchstaraccount')->user()->emp_id)->first();
+        return view('service.history',compact('employee_details'));
     }
 }

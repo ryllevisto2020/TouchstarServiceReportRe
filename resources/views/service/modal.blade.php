@@ -236,7 +236,7 @@
                             <div class="flex flex-col space-y-4">
                                 <!-- Signature Canvas -->
                                 <div class="border border-gray-300 rounded-lg bg-white overflow-hidden">
-                                    <canvas id="signature-pad" class="w-full h-32 touch-none bg-white"></canvas>
+                                    <canvas id="signature-pad" class="touch-none bg-white"></canvas>
                                 </div>
                                 
                                 <!-- Signature Controls -->
@@ -260,7 +260,7 @@
                         </div>
                         
                         <!-- Hidden input to store signature data -->
-                        <input type="hidden" id="signature-data" name="medtech_signature" required>
+                        <input type="hidden" id="signature-data" name="medtech_signature"  required>
                     </div>
 
                     <!-- Personnel Section -->
@@ -326,3 +326,21 @@
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        const medtech_signature = $("#signature-data");
+        const canvas = $("#signature-pad")[0];
+        const signature = new SignaturePad(canvas);
+
+        $("#service-form").submit(function(e){
+            if(!signature.isEmpty()){
+                medtech_signature.val(signature.toDataURL())
+            }
+            
+            if(medtech_signature.val() == ""){
+                e.preventDefault();
+                alert('Please provide your signature');
+            }
+        });
+    });
+</script>
