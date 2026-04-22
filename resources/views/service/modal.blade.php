@@ -1,255 +1,229 @@
 <!-- Service Modal -->
-<div id="service-modal" class="fixed z-50 inset-0 overflow-y-auto hidden">
-    <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-        <!-- Backdrop -->
-        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-            <div class="absolute inset-0 bg-gray-900/70 backdrop-blur-sm"></div>
-        </div>
+<div id="service-modal" class="fixed z-50 inset-0 hidden" style="overflow:hidden;">
+
+    <!-- Backdrop -->
+    <div id="modal-backdrop" onclick="closeServiceModal()" class="absolute inset-0 bg-gray-900/70" style="backdrop-filter:blur(4px);"></div>
+
+    <!-- Scroll wrapper -->
+    <div class="absolute inset-0 overflow-y-auto flex items-end sm:items-center justify-center sm:p-4">
 
         <!-- Modal Container -->
-        <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
-            <!-- Header -->
-            <div class="bg-gradient-to-r from-blue-600 to-indigo-700 px-6 py-4">
-                <div class="flex items-center justify-between">
+        <div id="modal-container" class="relative w-full bg-white text-left shadow-2xl"
+             style="border-radius:1rem 1rem 0 0; max-height:92dvh; overflow-y:auto; display:flex; flex-direction:column;">
+
+            @media sm { border-radius:1rem; }
+
+            <!-- Header (sticky) -->
+            <div class="bg-gradient-to-r from-blue-600 to-indigo-700 px-4 py-4 sm:px-6 flex-shrink-0"
+                 style="position:sticky;top:0;z-index:10;">
+                <div class="flex items-start justify-between gap-3">
                     <div>
-                        <h3 class="text-xl font-bold text-white">Complete Service Report</h3>
-                        <p class="mt-1 text-blue-100 text-sm">Fill out the required fields to complete the service report</p>
+                        <h3 class="text-base sm:text-xl font-bold text-white leading-tight">Complete Service Report</h3>
+                        <p class="mt-0.5 text-blue-100 text-xs sm:text-sm">Fill out the required fields to complete the service report</p>
                     </div>
-                    <button type="button" onclick="closeServiceModal()" class="text-white/80 hover:text-white focus:outline-none transition-colors">
-                        <i class="fas fa-times text-xl"></i>
+                    <button type="button" onclick="closeServiceModal()"
+                            class="text-white/80 hover:text-white focus:outline-none transition-colors flex-shrink-0 mt-0.5">
+                        <i class="fas fa-times text-lg"></i>
                     </button>
                 </div>
             </div>
-            
+
             <!-- Form -->
-            <form id="service-form" method="POST" action="/service/add" enctype="multipart/form-data">
+            <form id="service-form" method="POST" action="/service/add" enctype="multipart/form-data" style="flex:1;display:flex;flex-direction:column;">
                 @csrf
                 <input type="hidden" id="machine-id" name="machine_id" value="">
-                
-                <div class="bg-white px-6 pt-6 pb-4">
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <!-- Left Column -->
-                        <div class="space-y-6">
+
+                <div class="px-4 pt-5 pb-4 sm:px-6" style="flex:1;">
+
+                    <!-- Two-column on lg, single on mobile -->
+                    <div class="svc-grid">
+
+                        <!-- ── LEFT COLUMN ── -->
+                        <div style="display:flex;flex-direction:column;gap:1.25rem;">
+
                             <!-- Service Type -->
                             <div>
-                                <label class="block text-sm font-semibold text-gray-800 mb-3">Type of Service <span class="text-red-500">*</span></label>
-                                <div class="grid grid-cols-2 gap-3">
-                                    <label class="flex items-center p-3 rounded-lg border border-gray-200 hover:border-blue-400 hover:bg-blue-50/50 transition-all cursor-pointer">
+                                <label class="svc-label">Type of Service <span class="text-red-500">*</span></label>
+                                <div class="svc-checkbox-grid">
+                                    <label class="svc-check-card">
                                         <input type="checkbox" name="service_type[]" value="PMS" class="rounded text-blue-600 focus:ring-blue-500">
-                                        <span class="ml-3 text-sm font-medium">PMS</span>
+                                        <span class="ml-2.5 text-sm font-medium">PMS</span>
                                     </label>
-                                    <label class="flex items-center p-3 rounded-lg border border-gray-200 hover:border-blue-400 hover:bg-blue-50/50 transition-all cursor-pointer">
+                                    <label class="svc-check-card">
                                         <input type="checkbox" name="service_type[]" value="Troubleshooting" class="rounded text-blue-600 focus:ring-blue-500">
-                                        <span class="ml-3 text-sm font-medium">Troubleshooting</span>
+                                        <span class="ml-2.5 text-sm font-medium">Troubleshooting</span>
                                     </label>
-                                    <label class="flex items-center p-3 rounded-lg border border-gray-200 hover:border-blue-400 hover:bg-blue-50/50 transition-all cursor-pointer">
+                                    <label class="svc-check-card">
                                         <input type="checkbox" name="service_type[]" value="Installation" class="rounded text-blue-600 focus:ring-blue-500">
-                                        <span class="ml-3 text-sm font-medium">Installation</span>
+                                        <span class="ml-2.5 text-sm font-medium">Installation</span>
                                     </label>
-                                    <label class="flex items-center p-3 rounded-lg border border-gray-200 hover:border-blue-400 hover:bg-blue-50/50 transition-all cursor-pointer">
+                                    <label class="svc-check-card">
                                         <input type="checkbox" name="service_type[]" value="Warranty" class="rounded text-blue-600 focus:ring-blue-500">
-                                        <span class="ml-3 text-sm font-medium">Warranty</span>
+                                        <span class="ml-2.5 text-sm font-medium">Warranty</span>
                                     </label>
-                                    <label class="flex items-center p-3 rounded-lg border border-gray-200 hover:border-blue-400 hover:bg-blue-50/50 transition-all cursor-pointer">
+                                    <label class="svc-check-card">
                                         <input type="checkbox" name="service_type[]" value="Calibration" class="rounded text-blue-600 focus:ring-blue-500">
-                                        <span class="ml-3 text-sm font-medium">Calibration</span>
+                                        <span class="ml-2.5 text-sm font-medium">Calibration</span>
                                     </label>
-                                    <label class="flex items-center p-3 rounded-lg border border-gray-200 hover:border-blue-400 hover:bg-blue-50/50 transition-all cursor-pointer">
+                                    <label class="svc-check-card">
                                         <input type="checkbox" id="others-checkbox" class="rounded text-blue-600 focus:ring-blue-500">
-                                        <span class="ml-3 text-sm font-medium">Others</span>
+                                        <span class="ml-2.5 text-sm font-medium">Others</span>
                                     </label>
                                 </div>
-
-                                <!-- Hidden input for Others -->
-                                <div id="others-input" class="mt-3 hidden">
-                                    <input type="text" 
-                                        name="service_type[]" 
-                                        placeholder="Please specify..." 
-                                        class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
+                                <div id="others-input" class="mt-2.5 hidden">
+                                    <input type="text" name="service_type[]" placeholder="Please specify..."
+                                           class="svc-input">
                                 </div>
                             </div>
 
                             <!-- Identification -->
                             <div>
-                                <label class="block text-sm font-semibold text-gray-800 mb-2">Identification/Verification <span class="text-red-500">*</span></label>
-                                <textarea name="identification" rows="3" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all" placeholder="Enter identification details..." required></textarea>
+                                <label class="svc-label">Identification/Verification <span class="text-red-500">*</span></label>
+                                <textarea name="identification" rows="3" class="svc-textarea"
+                                          placeholder="Enter identification details..." required></textarea>
                             </div>
 
                             <!-- Root Cause -->
                             <div>
-                                <label class="block text-sm font-semibold text-gray-800 mb-2">Root Cause/Findings <span class="text-red-500">*</span></label>
-                                <textarea name="root_cause" rows="3" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all" placeholder="Describe the root cause..." required></textarea>
+                                <label class="svc-label">Root Cause/Findings <span class="text-red-500">*</span></label>
+                                <textarea name="root_cause" rows="3" class="svc-textarea"
+                                          placeholder="Describe the root cause..." required></textarea>
                             </div>
 
                             <!-- Action Taken -->
                             <div>
-                                <label class="block text-sm font-semibold text-gray-800 mb-2">Action Taken <span class="text-red-500">*</span></label>
-                                <textarea name="action_taken" rows="3" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all" placeholder="Describe actions taken..." required></textarea>
+                                <label class="svc-label">Action Taken <span class="text-red-500">*</span></label>
+                                <textarea name="action_taken" rows="3" class="svc-textarea"
+                                          placeholder="Describe actions taken..." required></textarea>
                             </div>
                         </div>
-                        
 
-                        <!-- Right Column -->
-                        <div class="space-y-6">
-                             <!-- Equipment Status -->
+                        <!-- ── RIGHT COLUMN ── -->
+                        <div style="display:flex;flex-direction:column;gap:1.25rem;">
+
+                            <!-- Equipment Status -->
                             <div>
-                                <label class="block text-sm font-semibold text-gray-800 mb-3">Equipment Status <span class="text-red-500">*</span></label>
-                                <div class="flex space-x-6">
-                                    <label class="flex items-center p-3 rounded-lg border border-gray-200 hover:border-blue-400 hover:bg-blue-50/50 transition-all cursor-pointer">
-                                        <input type="radio" name="equipment_status" value="Operational" class="text-blue-600 focus:ring-blue-500" required>
-                                        <span class="ml-3 text-sm font-medium">Operational</span>
+                                <label class="svc-label">Equipment Status <span class="text-red-500">*</span></label>
+                                <div class="svc-radio-row">
+                                    <label class="svc-check-card" style="flex:1;">
+                                        <input type="radio" name="equipment_status" value="Operational"
+                                               class="text-blue-600 focus:ring-blue-500" required>
+                                        <span class="ml-2.5 text-sm font-medium">Operational</span>
                                     </label>
-                                    <label class="flex items-center p-3 rounded-lg border border-gray-200 hover:border-blue-400 hover:bg-blue-50/50 transition-all cursor-pointer">
-                                        <input type="radio" name="equipment_status" value="Not Operational" class="text-blue-600 focus:ring-blue-500" required>
-                                        <span class="ml-3 text-sm font-medium">Not Operational</span>
+                                    <label class="svc-check-card" style="flex:1;">
+                                        <input type="radio" name="equipment_status" value="Not Operational"
+                                               class="text-blue-600 focus:ring-blue-500" required>
+                                        <span class="ml-2.5 text-sm font-medium">Not Operational</span>
                                     </label>
                                 </div>
                             </div>
-                            <!-- Recommendations -->
 
+                            <!-- Recommendations -->
                             <div>
-                                <label class="block text-sm font-semibold text-gray-800 mb-2">Recommendations</label>
-                                <textarea name="recommendations" rows="3" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all" placeholder="Enter recommendations..."></textarea>
+                                <label class="svc-label">Recommendations</label>
+                                <textarea name="recommendations" rows="3" class="svc-textarea"
+                                          placeholder="Enter recommendations..."></textarea>
                             </div>
 
                             <!-- Parts Replaced -->
                             <div>
-                                <label class="block text-sm font-semibold text-gray-800 mb-3">Parts Replaced</label>
-                                <div id="parts-container" class="space-y-3">
-                                    <div class="grid grid-cols-3 gap-3">
-                                        <input type="number" name="qty[]" placeholder="Qty" class="px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
-                                        <input type="text" name="particulars[]" placeholder="Particulars" class="px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
-                                        <input type="text" name="si_dr_no[]" placeholder="S.I./D.R. No." class="px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
+                                <label class="svc-label">Parts Replaced</label>
+                                <div id="parts-container" style="display:flex;flex-direction:column;gap:0.75rem;">
+                                    <div class="parts-row">
+                                        <input type="number" name="qty[]" placeholder="Qty" class="svc-input parts-qty">
+                                        <input type="text" name="particulars[]" placeholder="Particulars" class="svc-input parts-part">
+                                        <input type="text" name="si_dr_no[]" placeholder="S.I./D.R. No." class="svc-input parts-si">
                                     </div>
                                 </div>
-                                <button type="button" id="add-part" class="mt-3 flex items-center text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors">
+                                <button type="button" id="add-part"
+                                        class="mt-3 flex items-center text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors">
                                     <i class="fas fa-plus-circle mr-2"></i> Add Another Part
                                 </button>
                             </div>
 
                             <!-- Before Images -->
                             <div>
-                                <label class="block text-sm font-semibold text-gray-800 mb-3">
-                                    <i class="fas fa-camera mr-2 text-blue-500"></i> Before Images
-                                    <span class="text-xs text-gray-500 ml-1">(Max 5 images)</span>
-                                </label>
-                                
-                                <div id="before-upload-area" class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-blue-400 hover:bg-blue-50/30 transition-all cursor-pointer">
-                                    <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-3"></i>
-                                    <div class="flex flex-col sm:flex-row justify-center text-sm text-gray-600">
-                                        <span class="font-medium text-blue-600 hover:text-blue-500 transition-colors">
-                                            Click to upload or drag and drop
-                                        </span>
-                                    </div>
-                                    <p class="text-xs text-gray-500 mt-2">PNG, JPG, GIF up to 20MB each</p>
-                                    <div id="before-upload-status" class="text-xs text-green-600 mt-2 hidden upload-status">
-                                        <i class="fas fa-check-circle mr-1"></i>
-                                        <span class="count">0</span> files ready
+                                <label class="svc-label"><i class="fas fa-camera mr-1.5 text-blue-500"></i> Before Images <span class="text-xs text-gray-400 font-normal">(Max 5)</span></label>
+                                <div id="before-upload-area" class="svc-upload-area">
+                                    <i class="fas fa-cloud-upload-alt text-2xl text-gray-400 mb-2"></i>
+                                    <p class="text-sm font-medium text-blue-600">Tap to upload</p>
+                                    <p class="text-xs text-gray-400 mt-1">PNG, JPG, GIF up to 20MB</p>
+                                    <div id="before-upload-status" class="text-xs text-green-600 mt-1.5 hidden upload-status">
+                                        <i class="fas fa-check-circle mr-1"></i><span class="count">0</span> files ready
                                     </div>
                                     <input id="before-images" name="before_images[]" type="file" class="hidden" multiple accept="image/*">
                                 </div>
-                                <div id="before-image-preview" class="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3"></div>
+                                <div id="before-image-preview" class="svc-preview-grid"></div>
                             </div>
 
                             <!-- After Images -->
                             <div>
-                                <label class="block text-sm font-semibold text-gray-800 mb-3">
-                                    <i class="fas fa-camera mr-2 text-blue-500"></i> After Images
-                                    <span class="text-xs text-gray-500 ml-1">(Max 5 images)</span>
-                                </label>
-                                
-                                <div id="after-upload-area" class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-blue-400 hover:bg-blue-50/30 transition-all cursor-pointer">
-                                    <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-3"></i>
-                                    <div class="flex flex-col sm:flex-row justify-center text-sm text-gray-600">
-                                        <span class="font-medium text-blue-600 hover:text-blue-500 transition-colors">
-                                            Click to upload or drag and drop
-                                        </span>
-                                    </div>
-                                    <p class="text-xs text-gray-500 mt-2">PNG, JPG, GIF up to 20MB each</p>
-                                    <div id="after-upload-status" class="text-xs text-green-600 mt-2 hidden upload-status">
-                                        <i class="fas fa-check-circle mr-1"></i>
-                                        <span class="count">0</span> files ready
+                                <label class="svc-label"><i class="fas fa-camera mr-1.5 text-blue-500"></i> After Images <span class="text-xs text-gray-400 font-normal">(Max 5)</span></label>
+                                <div id="after-upload-area" class="svc-upload-area">
+                                    <i class="fas fa-cloud-upload-alt text-2xl text-gray-400 mb-2"></i>
+                                    <p class="text-sm font-medium text-blue-600">Tap to upload</p>
+                                    <p class="text-xs text-gray-400 mt-1">PNG, JPG, GIF up to 20MB</p>
+                                    <div id="after-upload-status" class="text-xs text-green-600 mt-1.5 hidden upload-status">
+                                        <i class="fas fa-check-circle mr-1"></i><span class="count">0</span> files ready
                                     </div>
                                     <input id="after-images" name="after_images[]" type="file" class="hidden" multiple accept="image/*">
                                 </div>
-                                <div id="after-image-preview" class="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3"></div>
+                                <div id="after-image-preview" class="svc-preview-grid"></div>
                             </div>
 
                             <!-- Service Images -->
                             <div>
-                                <label class="block text-sm font-semibold text-gray-800 mb-3">
-                                    <i class="fas fa-camera mr-2 text-blue-500"></i> Service Images
-                                    <span class="text-xs text-gray-500 ml-1">(Max 10 images)</span>
-                                </label>
-                                
-                                <div id="service-upload-area" class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-blue-400 hover:bg-blue-50/30 transition-all cursor-pointer">
-                                    <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-3"></i>
-                                    <div class="flex flex-col sm:flex-row justify-center text-sm text-gray-600">
-                                        <span class="font-medium text-blue-600 hover:text-blue-500 transition-colors">
-                                            Click to upload or drag and drop
-                                        </span>
-                                    </div>
-                                    <p class="text-xs text-gray-500 mt-2">PNG, JPG, GIF up to 20MB each</p>
-                                    <div id="service-upload-status" class="text-xs text-green-600 mt-2 hidden upload-status">
-                                        <i class="fas fa-check-circle mr-1"></i>
-                                        <span class="count">0</span> files ready
+                                <label class="svc-label"><i class="fas fa-camera mr-1.5 text-blue-500"></i> Service Images <span class="text-xs text-gray-400 font-normal">(Max 10)</span></label>
+                                <div id="service-upload-area" class="svc-upload-area">
+                                    <i class="fas fa-cloud-upload-alt text-2xl text-gray-400 mb-2"></i>
+                                    <p class="text-sm font-medium text-blue-600">Tap to upload</p>
+                                    <p class="text-xs text-gray-400 mt-1">PNG, JPG, GIF up to 20MB</p>
+                                    <div id="service-upload-status" class="text-xs text-green-600 mt-1.5 hidden upload-status">
+                                        <i class="fas fa-check-circle mr-1"></i><span class="count">0</span> files ready
                                     </div>
                                     <input id="service-images" name="images[]" type="file" class="hidden" multiple accept="image/*">
                                 </div>
-                                <div id="service-image-preview" class="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3"></div>
+                                <div id="service-image-preview" class="svc-preview-grid"></div>
                             </div>
 
                             <!-- Calibration Images -->
                             <div>
-                                <label class="block text-sm font-semibold text-gray-800 mb-3">
-                                    <i class="fas fa-camera mr-2 text-blue-500"></i> Calibration Images
-                                    <span class="text-xs text-gray-500 ml-1">(Max 10 images)</span>
-                                </label>
-                                
-                                <div id="calibration-upload-area" class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-blue-400 hover:bg-blue-50/30 transition-all cursor-pointer">
-                                    <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-3"></i>
-                                    <div class="flex flex-col sm:flex-row justify-center text-sm text-gray-600">
-                                        <span class="font-medium text-blue-600 hover:text-blue-500 transition-colors">
-                                            Click to upload or drag and drop
-                                        </span>
-                                    </div>
-                                    <p class="text-xs text-gray-500 mt-2">PNG, JPG, GIF up to 20MB each</p>
-                                    <div id="calibration-upload-status" class="text-xs text-green-600 mt-2 hidden upload-status">
-                                        <i class="fas fa-check-circle mr-1"></i>
-                                        <span class="count">0</span> files ready
+                                <label class="svc-label"><i class="fas fa-camera mr-1.5 text-blue-500"></i> Calibration Images <span class="text-xs text-gray-400 font-normal">(Max 10)</span></label>
+                                <div id="calibration-upload-area" class="svc-upload-area">
+                                    <i class="fas fa-cloud-upload-alt text-2xl text-gray-400 mb-2"></i>
+                                    <p class="text-sm font-medium text-blue-600">Tap to upload</p>
+                                    <p class="text-xs text-gray-400 mt-1">PNG, JPG, GIF up to 20MB</p>
+                                    <div id="calibration-upload-status" class="text-xs text-green-600 mt-1.5 hidden upload-status">
+                                        <i class="fas fa-check-circle mr-1"></i><span class="count">0</span> files ready
                                     </div>
                                     <input id="calibration-images" name="calibration_images[]" type="file" class="hidden" multiple accept="image/*">
                                 </div>
-                                <div id="calibration-image-preview" class="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3"></div>
+                                <div id="calibration-image-preview" class="svc-preview-grid"></div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Signature Section -->
-                    <div class="mt-8 pt-6 border-t border-gray-200">
-                        <label class="block text-sm font-semibold text-gray-800 mb-4">
-                            <i class="fas fa-signature mr-2 text-blue-500"></i> MedTech E-Signature <span class="text-red-500">*</span>
+                    <div class="mt-6 pt-6 border-t border-gray-200">
+                        <label class="svc-label">
+                            <i class="fas fa-signature mr-1.5 text-blue-500"></i> MedTech E-Signature <span class="text-red-500">*</span>
                         </label>
-                        
-                        <!-- Signature Capture Area -->
-                        <div class="border border-gray-300 rounded-xl p-5 bg-white">
-                            <div class="flex flex-col space-y-4">
-                                <!-- Signature Canvas -->
+                        <div class="border border-gray-300 rounded-xl p-3 sm:p-5 bg-white">
+                            <div style="display:flex;flex-direction:column;gap:0.75rem;">
                                 <div class="border border-gray-300 rounded-lg bg-white overflow-hidden">
-                                    <canvas id="signature-pad" class="touch-none bg-white"></canvas>
+                                    <canvas id="signature-pad" class="touch-none bg-white"
+                                            style="width:100%;height:150px;display:block;"></canvas>
                                 </div>
-                                
-                                <!-- Signature Controls -->
-                                <div class="flex space-x-3">
-                                    <button type="button" id="clear-signature" class="flex-1 py-2.5 px-4 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors">
+                                <div style="display:flex;gap:0.75rem;">
+                                    <button type="button" id="clear-signature"
+                                            class="flex-1 py-2.5 px-4 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors">
                                         <i class="fas fa-eraser mr-2"></i> Clear
                                     </button>
-                                    <button type="button" id="undo-signature" class="flex-1 py-2.5 px-4 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors">
+                                    <button type="button" id="undo-signature"
+                                            class="flex-1 py-2.5 px-4 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors">
                                         <i class="fas fa-undo mr-2"></i> Undo
                                     </button>
                                 </div>
-                                
-                                <!-- Signature Preview -->
                                 <div id="signature-preview" class="hidden">
                                     <p class="text-sm text-gray-600 mb-2">Signature Preview:</p>
                                     <div class="border border-gray-300 rounded-lg p-3 bg-white">
@@ -258,66 +232,56 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        <!-- Hidden input to store signature data -->
-                        <input type="hidden" id="signature-data" name="medtech_signature"  required>
+                        <input type="hidden" id="signature-data" name="medtech_signature" required>
                     </div>
 
                     <!-- Personnel Section -->
-                    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="mt-5 svc-personnel-grid">
                         <div>
-                            <label class="block text-sm font-semibold text-gray-800 mb-2">
-                                <i class="fas fa-user-check mr-2 text-blue-500"></i> Approved By (MedTech) <span class="text-red-500">*</span>
+                            <label class="svc-label">
+                                <i class="fas fa-user-check mr-1.5 text-blue-500"></i> Approved By (MedTech) <span class="text-red-500">*</span>
                             </label>
-                            <input type="text" name="approved_by" placeholder="Enter name of MedTech approver" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all" required>
-                            <p class="text-xs text-gray-500 mt-2">The person who will approve this service report</p>
+                            <input type="text" name="approved_by" placeholder="Enter name of MedTech approver"
+                                   class="svc-input" required>
+                            <p class="text-xs text-gray-400 mt-1.5">The person who will approve this service report</p>
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold text-gray-800 mb-2">
-                                <i class="fas fa-user-cog mr-2 text-blue-500"></i> Service Engineer
+                            <label class="svc-label">
+                                <i class="fas fa-user-cog mr-1.5 text-blue-500"></i> Service Engineer
                             </label>
-                            <div class="w-full px-4 py-3 rounded-lg border border-gray-300 bg-gray-50">
-                                <div class="text-gray-700 font-medium" id="service-engineer-name">
-                                    {{-- {{ Auth::user()->name ?? 'Current User' }} --}}
+                            <div class="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50">
+                                <div class="text-gray-700 font-medium text-sm" id="service-engineer-name">
                                     {{$employee_details->emp_first_name}} {{$employee_details->emp_last_name}}
                                 </div>
-                                <div class="text-xs text-gray-500 mt-1">
+                                <div class="text-xs text-gray-400 mt-1">
                                     <i class="fas fa-building mr-1"></i> {{$employee_details->emp_position}}
                                 </div>
                             </div>
-                            <!-- Hidden fields for form submission -->
                             <input type="hidden" name="service_engineer" value="{{$employee_details->emp_first_name}} {{$employee_details->emp_last_name}}">
                             <input type="hidden" name="service_engineer_department" value="{{$employee_details->emp_deparment}}">
                         </div>
                     </div>
                 </div>
 
-                <!-- Footer -->
-                <div class="bg-gray-50 px-6 py-4 border-t border-gray-200">
+                <!-- Footer (sticky) -->
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 border-t border-gray-200 flex-shrink-0"
+                     style="position:sticky;bottom:0;z-index:10;">
                     <div id="draft-status-indicator"></div>
-                    
-                    <div class="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0 sm:space-x-3">
-                        <div class="flex space-x-2">
-                            <button type="button" id="save-draft-btn" 
-                                    class="px-4 py-2 border border-yellow-300 text-yellow-700 bg-yellow-50 rounded-lg font-medium hover:bg-yellow-100 hover:border-yellow-400 transition-all">
-                                <i class="fas fa-save mr-2"></i>Save Draft
+                    <div class="svc-footer-btns">
+                        <div class="svc-footer-left">
+                            <button type="button" id="save-draft-btn" class="svc-btn-draft">
+                                <i class="fas fa-save mr-1.5"></i>Save Draft
                             </button>
-                            
-                            <button type="button" id="clear-draft-btn" 
-                                    class="px-4 py-2 border border-gray-300 text-gray-700 bg-gray-50 rounded-lg font-medium hover:bg-gray-100 transition-all hidden">
-                                <i class="fas fa-times mr-2"></i>Clear Draft
+                            <button type="button" id="clear-draft-btn" class="svc-btn-clear hidden">
+                                <i class="fas fa-times mr-1.5"></i>Clear Draft
                             </button>
                         </div>
-                        
-                        <div class="flex space-x-2">
-                            <button type="button" onclick="closeServiceModal()" 
-                                    class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all">
+                        <div class="svc-footer-right">
+                            <button type="button" onclick="closeServiceModal()" class="svc-btn-cancel">
                                 Cancel
                             </button>
-                                                        
-                            <button type="submit" id="submit-service-btn" 
-                                    class="px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-700 border border-transparent rounded-lg text-white font-medium hover:from-green-700 hover:to-emerald-800 focus:outline-none focus:ring-2 focus:ring-green-500 shadow-md transition-all">
-                                <i class="fas fa-check-circle mr-2"></i>Complete Service
+                            <button type="submit" id="submit-service-btn" class="svc-btn-submit">
+                                <i class="fas fa-check-circle mr-1.5"></i>Complete Service
                             </button>
                         </div>
                     </div>
@@ -326,21 +290,231 @@
         </div>
     </div>
 </div>
-<script>
-    $(document).ready(function () {
-        const medtech_signature = $("#signature-data");
-        const canvas = $("#signature-pad")[0];
-        const signature = new SignaturePad(canvas);
 
-        $("#service-form").submit(function(e){
-            if(!signature.isEmpty()){
-                medtech_signature.val(signature.toDataURL())
-            }
-            
-            if(medtech_signature.val() == ""){
-                e.preventDefault();
-                alert('Please provide your signature');
-            }
-        });
+<style>
+.svc-label {
+    display: block;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+}
+.svc-input {
+    width: 100%;
+    padding: 0.625rem 0.875rem;
+    border-radius: 0.5rem;
+    border: 1px solid #d1d5db;
+    font-size: 0.875rem;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    box-sizing: border-box;
+}
+.svc-input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+}
+.svc-textarea {
+    width: 100%;
+    padding: 0.75rem 0.875rem;
+    border-radius: 0.5rem;
+    border: 1px solid #d1d5db;
+    font-size: 0.875rem;
+    outline: none;
+    resize: vertical;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+.svc-textarea:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+}
+.svc-check-card {
+    display: flex;
+    align-items: center;
+    padding: 0.625rem 0.75rem;
+    border-radius: 0.5rem;
+    border: 1px solid #e5e7eb;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+}
+.svc-check-card:hover {
+    border-color: #93c5fd;
+    background: rgba(239,246,255,0.6);
+}
+.svc-checkbox-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+}
+.svc-radio-row {
+    display: flex;
+    gap: 0.75rem;
+}
+.svc-upload-area {
+    border: 2px dashed #d1d5db;
+    border-radius: 0.75rem;
+    padding: 1.25rem 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+}
+.svc-upload-area:hover {
+    border-color: #60a5fa;
+    background: rgba(239,246,255,0.3);
+}
+.svc-preview-grid {
+    margin-top: 0.75rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+}
+/* Parts row */
+.parts-row {
+    display: grid;
+    grid-template-columns: 64px 1fr 90px;
+    gap: 0.5rem;
+}
+/* Two-column form grid */
+.svc-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+/* Personnel grid */
+.svc-personnel-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+/* Footer buttons */
+.svc-footer-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+}
+.svc-footer-left,
+.svc-footer-right {
+    display: flex;
+    gap: 0.5rem;
+}
+.svc-footer-left > button,
+.svc-footer-right > button {
+    flex: 1;
+    justify-content: center;
+}
+.svc-btn-draft {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    border: 1px solid #fde68a;
+    color: #92400e;
+    background: #fffbeb;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s;
+    white-space: nowrap;
+}
+.svc-btn-draft:hover { background: #fef3c7; }
+.svc-btn-clear {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    border: 1px solid #d1d5db;
+    color: #374151;
+    background: #f9fafb;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s;
+    white-space: nowrap;
+}
+.svc-btn-clear:hover { background: #f3f4f6; }
+.svc-btn-cancel {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    border: 1px solid #d1d5db;
+    color: #374151;
+    background: white;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s;
+    white-space: nowrap;
+}
+.svc-btn-cancel:hover { background: #f9fafb; }
+.svc-btn-submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1.25rem;
+    background: linear-gradient(to right, #16a34a, #059669);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.15s;
+    white-space: nowrap;
+}
+.svc-btn-submit:hover { opacity: 0.9; }
+
+/* ── Tablet and up (640px+) ── */
+@media (min-width: 640px) {
+    #modal-container {
+        border-radius: 1rem !important;
+        max-width: 56rem;
+        margin: auto;
+        max-height: 90dvh;
+    }
+    .svc-footer-btns {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .svc-footer-left > button,
+    .svc-footer-right > button {
+        flex: none;
+    }
+    .parts-row {
+        grid-template-columns: 80px 1fr 110px;
+    }
+}
+
+/* ── Desktop (1024px+) ── */
+@media (min-width: 1024px) {
+    .svc-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    .svc-personnel-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+</style>
+
+<script>
+$(document).ready(function () {
+    const medtech_signature = $("#signature-data");
+    const canvas = $("#signature-pad")[0];
+    const signature = new SignaturePad(canvas);
+
+    $("#service-form").submit(function(e){
+        if(!signature.isEmpty()){
+            medtech_signature.val(signature.toDataURL())
+        }
+        if(medtech_signature.val() == ""){
+            e.preventDefault();
+            alert('Please provide your signature');
+        }
     });
+});
 </script>
