@@ -45,5 +45,6 @@ Route::delete('/machine/{machine}', [MachineController::class, 'destroy'])->name
 Route::get('/service', [ServiceController::class, 'report'])->name('service.report')->middleware([isAuthEmployee::class]);
 Route::post('/service/add',[ServiceController::class, 'addReport'])->name('service.add')->middleware([isAuthEmployee::class]);
 
+#History Routes
 Route::get('/service/history', [ServiceController::class, 'history'])->name('service.history');
     

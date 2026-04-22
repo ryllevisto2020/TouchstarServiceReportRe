@@ -449,7 +449,7 @@ function loadDraft() {
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
   render();
-  initSignaturePad();
+  // initSignaturePad();
   
   // Setup image uploads
   setupImageUpload('before-upload-area', 'before-images', 'before-image-preview', 'before-upload-status', 5);
@@ -459,11 +459,11 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Form submission
   document.getElementById('service-form').addEventListener('submit', (e) => {
-    updateSignatureData();
-    if (!document.getElementById('signature-data').value) {
-      e.preventDefault();
-      alert('Please provide your signature');
-    }
+    // updateSignatureData();
+    // if (!document.getElementById('signature-data').value) {
+    //   e.preventDefault();
+    //   alert('Please provide your signature');
+    // }
   });
 });
 

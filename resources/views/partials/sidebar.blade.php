@@ -92,7 +92,7 @@
                         <i class="fa-solid fa-calendar-check w-4 mr-2"></i>
                         Service Reports
                     </a>
-                    <a href="" class="dropdown-link">
+                    <a href="/service/history" class="dropdown-link">
                         <i class="fa-solid fa-clipboard-list w-4 mr-2"></i>
                         Service Report History
                     </a>
